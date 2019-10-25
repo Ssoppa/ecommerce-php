@@ -81,7 +81,65 @@ class User extends Model {
         $this->setData($data);
     }
 
-    
+    public function save() {
+
+        $sql = new Sql();
+
+        /*
+        pdesperson VARCHAR(64), 
+        pdeslogin VARCHAR(64), 
+        pdespassword VARCHAR(256), 
+        pdesemail VARCHAR(128), 
+        pnrphone BIGINT, 
+        pinadmin TINYINT
+        */
+
+        $result = $sql->select("CALL sp_users_save(:desperson, :deslogin, :despassword, :desemail, :nrphone, :inadmin)", array(
+            ":desperson" => $this->getdesperson(),
+            ":deslogin"=> $this->getdeslogin(),
+            ":despassword"=>$this->getdespassword(),
+            ":desemail"=>$this->getdesemail(),
+            ":nrphone"=>$this->getnrphone(),
+            ":inadmin"=>$this->getinadmin()
+        ));
+
+        $this->setData($result[0]);
+    }
+
+    public static function getPasswordHash($password) {
+
+        return password_hash($password, PASSWORD_DEFAULT, [
+            'cost'=>12
+        ]);
+        
+    }
+
+    public function update() {
+
+        $sql = new Sql();
+
+        $result = $sql->select("CALL sp_usersupdate_save(:iduser, :desperson, :deslogin, :despassword, :desemail, :nrphone, :inadmin)", array(
+            ":iduser" => $this->getiduser(),
+            ":desperson" => $this->getdesperson(),
+            ":deslogin"=> $this->getdeslogin(),
+            ":despassword"=>$this->getdespassword(),
+            ":desemail"=>$this->getdesemail(),
+            ":nrphone"=>$this->getnrphone(),
+            ":inadmin"=>$this->getinadmin()
+        ));
+
+        $this->setData($result[0]);
+    }
+
+    public function delete() {
+
+        $sql = new Sql();
+
+        $sql->query("CALL sp_users_delete(:iduser)", array(
+            ":iduser" => $this->getiduser()
+        ));
+
+    }
 
 }
 ?>
