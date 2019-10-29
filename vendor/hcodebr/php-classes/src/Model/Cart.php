@@ -81,6 +81,8 @@ class Cart extends Model {
 			':idcart'=>$this->getidcart(),
 			':idproduct'=>$product->getidproduct()
 		]);
+
+		$this->getCalculateTotal();
     }
 
     public function removeProduct(Product $product, $all = false)
@@ -102,7 +104,9 @@ class Cart extends Model {
                 ':idproduct'=>$product->getidproduct()
                 
 			]);
-        }
+		}
+		
+		$this->getCalculateTotal();
 
 	}
 
@@ -242,6 +246,7 @@ class Cart extends Model {
         }
         
 	}
+
 	public function getValues() {
 
         $this->getCalculateTotal();
@@ -249,6 +254,7 @@ class Cart extends Model {
         return parent::getValues();
         
 	}
+
 	public function getCalculateTotal() {
 
         $this->updateFreight();
