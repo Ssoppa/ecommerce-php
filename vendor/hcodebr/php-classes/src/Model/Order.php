@@ -190,7 +190,6 @@ class Order extends Model {
 	
 	}
 
-
 }
 
 ?>
